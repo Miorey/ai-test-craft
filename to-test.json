@@ -7,7 +7,7 @@
   "files": [
     {
       "code": "aitestgen.py",
-      "test": "tests/test.aitestgen.py"
+      "test": "tests/test_aitestgen.py"
     }
   ]
 }

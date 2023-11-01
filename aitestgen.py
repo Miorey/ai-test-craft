@@ -27,15 +27,15 @@ def generate_test(filepath: str, open_ai_env_var: str):
     except (IOError, json.JSONDecodeError) as e:
         raise click.ClickException(f"Unable to read json file {filepath}")
 
-    generate_files(setup)
+    execute_test_cover(setup)
 
 
-def generate_files(gen_setup: dict[str, str|list[dict[str, str]]]):
+def execute_test_cover(gen_setup: dict[str, str|list[dict[str, str]]]):
     language = gen_setup["language"]
     for to_cover in gen_setup["files"]:
         with open(to_cover["code"], 'r') as file:
             content = file.read()
-        print(content)
+
         completion = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -43,12 +43,14 @@ def generate_files(gen_setup: dict[str, str|list[dict[str, str]]]):
                 {
                     "role": "user", "content": f"""
                     Write the unit test of the following code. 
-                    Give me only the tests snippet:
+                    The test should follow those rules:
                      - THE TEST SHOULD COVER 100% of the code
-                     - without syntax highlighting
-                     - without any introduction or explanation
-                     - ALL the test should be in the same snippet
                      - In the imports take in account that the test is in {to_cover["code"]} and the test in {to_cover["test"]}
+                     
+                    Your answear sshould contain:
+                     - no syntax highlighting
+                     - no introduction or explanation
+                     - ALL the test should be in the same snippet
                     ```
                         {content}
                     ```
@@ -56,6 +58,8 @@ def generate_files(gen_setup: dict[str, str|list[dict[str, str]]]):
                  }
             ]
         )
+
+        print(completion)
 
         s = completion["choices"][0]["message"]["content"]
         s = s.replace("```", "")
