@@ -1,0 +1,13 @@
+{
+  "language": "pyhton10",
+  "framework": null,
+  "test-framework": null,
+  "package-file": null,
+  "annotation": true,
+  "files": [
+    {
+      "code": "aitestgen.py",
+      "test": "tests/test.aitestgen.py"
+    }
+  ]
+}
