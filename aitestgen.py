@@ -8,14 +8,24 @@ from pathlib import Path
 @click.command()
 @click.argument('filepath', type=click.Path(exists=True))
 @click.option('--open-ai-env-var', required=False)
-def generate_test(filepath: str, open_ai_env_var: str):
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+def generate_test(filepath: str, open_ai_env_var: str | None):
+    # AI-TEST: don't test this function
+
+    setup = validate_inputs(filepath, open_ai_env_var)
+    execute_test_cover(setup)
+
+
+def validate_inputs(filepath: str, open_ai_env_var: str | None) -> dict:
+    open_api_key = os.getenv(open_ai_env_var or "OPENAI_API_KEY")
+    if not open_api_key:
+        raise click.ClickException('Api key env var is not set')
+    openai.api_key = open_api_key
     if not filepath:
         raise click.ClickException('File is not set')
     file_path = Path(filepath)
 
     if not file_path.exists():
-        raise click.ClickException(f'File is not {filepath} not exists')
+        raise click.ClickException(f'File {filepath} not exists')
 
     if file_path.suffix != ".json":
         raise click.ClickException("File does not have a .json extension.")
@@ -23,19 +33,20 @@ def generate_test(filepath: str, open_ai_env_var: str):
     try:
         with file_path.open('r') as f:
             setup = json.load(f)
-        print(setup)
+            return setup
     except (IOError, json.JSONDecodeError) as e:
         raise click.ClickException(f"Unable to read json file {filepath}")
 
-    execute_test_cover(setup)
 
-
-def execute_test_cover(gen_setup: dict[str, str|list[dict[str, str]]]):
+def execute_test_cover(gen_setup: dict[str, str | list[dict[str, str]]]):
     language = gen_setup["language"]
     for to_cover in gen_setup["files"]:
+        # AI-TEST: Mock the open usage to avoid FileNotFound exception
         with open(to_cover["code"], 'r') as file:
             content = file.read()
+        additional_comments: list[str] = gen_setup.get("additional-comments", [])
 
+        # AI-TEST: mock the following openai call
         completion = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -44,18 +55,22 @@ def execute_test_cover(gen_setup: dict[str, str|list[dict[str, str]]]):
                     "role": "user", "content": f"""
                     Write the unit test of the following code. 
                     The test should follow those rules:
-                     - THE TEST SHOULD COVER 100% of the code
-                     - In the imports take in account that the test is in {to_cover["code"]} and the test in {to_cover["test"]}
+                     - THE TEST SHOULD COVER 100% of the code.
+                     - In the imports take in account that the test is in {to_cover["code"]} and the test in {to_cover["test"]}.
+                     - The comments starting with `AI-TEST:` take them in consideration. 
+                     - {', '.join(additional_comments)}
+                     - BE SURE YOU USE ONLY THAT YOU WELL `import` the requirements.
+                     - The test should be simple and with a cyclomatic complexity as lower as possible.
                      
-                    Your answear sshould contain:
-                     - no syntax highlighting
-                     - no introduction or explanation
-                     - ALL the test should be in the same snippet
+                    Your answer should contain:
+                     - NO SYNTAX HIGHLIGHTING.
+                     - no introduction or explanation.
+                     - ALL the test should be in the same snippet.
                     ```
                         {content}
                     ```
                     """
-                 }
+                }
             ]
         )
 
@@ -68,12 +83,6 @@ def execute_test_cover(gen_setup: dict[str, str|list[dict[str, str]]]):
             f.write(s)
 
 
-
-
+# AI-TEST: don't test this condition
 if __name__ == '__main__':
     generate_test()
-
-# openai.api_key = os.getenv("OPENAI_API_KEY")
-# print(openai.api_key)
-
-
