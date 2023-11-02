@@ -74,12 +74,8 @@ def execute_test_cover(gen_setup: dict[str, str | list[dict[str, str]]]):
                 }
             ]
         )
-
-        print(completion)
-
         s = completion["choices"][0]["message"]["content"]
         s = s.replace("```", "")
-
         with open(to_cover["test"], 'w') as f:
             f.write(s)
 

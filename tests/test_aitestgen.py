@@ -49,8 +49,17 @@ def test_execute_test_cover():
         "additional-comments": ["This is an additional comment."]
     }
 
-    with patch('openai.api_key', 'mock_key'), \
-            patch('builtins.open', mock_open(read_data='mock file content')) as m_open:
+    with patch(
+            'openai.api_key', 'mock_key'
+    ), patch(
+        'openai.ChatCompletion.create', return_value={
+            "choices": [
+                {"message": {"content": "``` my code ```"}}
+            ]
+        }
+    ), patch(
+        'builtins.open', mock_open(read_data='mock file content')
+    ) as m_open:
         execute_test_cover(gen_setup)
 
-        m_open.assert_called_with("./tests/test_code.py", 'r')
+        m_open.assert_called_with("./tests/test_aitestgen.py", 'w')
