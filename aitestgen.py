@@ -24,6 +24,7 @@ def validate_inputs(filepath: str, open_ai_env_var: str | None) -> dict:
         raise click.ClickException('File is not set')
     file_path = Path(filepath)
 
+    # AI-TEST: for the test the valid existing file path is: './tests/valid_file.json'
     if not file_path.exists():
         raise click.ClickException(f'File {filepath} not exists')
 
