@@ -1,15 +1,14 @@
-import os
-import openai
 import click
-import json
-from pathlib import Path
-
-# AI-TEST: import the necessary modules for testing
+from unittest.mock import mock_open, patch, MagicMock
 import pytest
-from unittest.mock import patch, mock_open
 
-# AI-TEST: import the function to be tested
-from aitestgen import validate_inputs, execute_test_cover
+import aitestgen
+
+
+def test_validate_inputs_existing_file():
+    with patch('builtins.open', mock_open()):
+        setup = aitestgen.validate_inputs('./tests/valid_file.json', None)
+    assert setup["model"] == "fake-ai"
 
 
 # AI-TEST: define the test cases
@@ -17,7 +16,7 @@ def test_validate_inputs_valid_file():
     filepath = './tests/valid_file.json'
     openai_env_var = None
 
-    result = validate_inputs(filepath, openai_env_var)
+    result = aitestgen.validate_inputs(filepath, openai_env_var)
 
     assert isinstance(result, dict)
 
@@ -27,7 +26,7 @@ def test_validate_inputs_invalid_file():
     openai_env_var = None
 
     with pytest.raises(click.ClickException):
-        validate_inputs(filepath, openai_env_var)
+        aitestgen.validate_inputs(filepath, openai_env_var)
 
 
 def test_validate_inputs_non_json_file():
@@ -35,10 +34,9 @@ def test_validate_inputs_non_json_file():
     openai_env_var = None
 
     with pytest.raises(click.ClickException):
-        validate_inputs(filepath, openai_env_var)
+        aitestgen.validate_inputs(filepath, openai_env_var)
 
 
-# AI-TEST: mock the openai.api_key assignment and file read operation
 def test_execute_test_cover():
     gen_setup = {
         "language": "python",
@@ -50,17 +48,15 @@ def test_execute_test_cover():
         "model": "ai-fake-model"
     }
 
+    message_magic = MagicMock()
+    message_magic.choices[0].message.content = "``` my code ```"
+
     with patch(
             'openai.api_key', 'mock_key'
     ), patch(
-        'openai.ChatCompletion.create', return_value={
-            "choices": [
-                {"message": {"content": "``` my code ```"}}
-            ]
-        }
+        'aitestgen.client.chat.completions.create', return_value=message_magic
     ), patch(
         'builtins.open', mock_open(read_data='mock file content')
     ) as m_open:
-        execute_test_cover(gen_setup)
-
+        aitestgen.execute_test_cover(gen_setup)
         m_open.assert_called_with("./tests/test_aitestgen.py", 'w')

@@ -1,9 +1,9 @@
 import os
-import openai
 import click
 import json
 from pathlib import Path
-
+from openai import OpenAI
+client = OpenAI()
 
 @click.command()
 @click.argument('filepath', type=click.Path(exists=True))
@@ -19,7 +19,7 @@ def validate_inputs(filepath: str, open_ai_env_var: str | None) -> dict:
     open_api_key = os.getenv(open_ai_env_var or "OPENAI_API_KEY")
     if not open_api_key:
         raise click.ClickException('Api key env var is not set')
-    openai.api_key = open_api_key
+    client.api_key = open_api_key
     if not filepath:
         raise click.ClickException('File is not set')
     file_path = Path(filepath)
@@ -48,7 +48,7 @@ def execute_test_cover(gen_setup: dict[str, str | list[dict[str, str]]]):
         additional_comments: list[str] = gen_setup.get("additional-comments", [])
 
         # AI-TEST: mock the following openai call
-        completion = openai.ChatCompletion.create(
+        completion = client.chat.completions.create(
             model=gen_setup["model"],
             messages=[
                 {"role": "system", "content": f"You are a f{language} developer"},
@@ -74,7 +74,7 @@ def execute_test_cover(gen_setup: dict[str, str | list[dict[str, str]]]):
                 }
             ]
         )
-        ai_response = completion["choices"][0]["message"]["content"]
+        ai_response = completion.choices[0].message.content
         only_code = ai_response.replace("```", "")
         with open(to_cover["test"], 'w') as f:
             f.write(only_code)
