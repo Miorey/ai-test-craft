@@ -46,7 +46,8 @@ def test_execute_test_cover():
             "code": "./tests/test_code.py",
             "test": "./tests/test_aitestgen.py"
         }],
-        "additional-comments": ["This is an additional comment."]
+        "additional-comments": ["This is an additional comment."],
+        "model": "ai-fake-model"
     }
 
     with patch(

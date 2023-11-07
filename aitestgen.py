@@ -49,7 +49,7 @@ def execute_test_cover(gen_setup: dict[str, str | list[dict[str, str]]]):
 
         # AI-TEST: mock the following openai call
         completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model=gen_setup["model"],
             messages=[
                 {"role": "system", "content": f"You are a f{language} developer"},
                 {
@@ -74,10 +74,10 @@ def execute_test_cover(gen_setup: dict[str, str | list[dict[str, str]]]):
                 }
             ]
         )
-        s = completion["choices"][0]["message"]["content"]
-        s = s.replace("```", "")
+        ai_response = completion["choices"][0]["message"]["content"]
+        only_code = ai_response.replace("```", "")
         with open(to_cover["test"], 'w') as f:
-            f.write(s)
+            f.write(only_code)
 
 
 # AI-TEST: don't test this condition

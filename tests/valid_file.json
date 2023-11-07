@@ -4,6 +4,7 @@
   "test-framework": null,
   "package-file": null,
   "annotation": true,
+  "model": "fake-ai",
   "additional-comments": [
     "Use functions for each testcase"
   ],
