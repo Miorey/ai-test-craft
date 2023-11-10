@@ -9,8 +9,16 @@
   ],
   "files": [
     {
-      "code": "aitestgen.py",
-      "test": "tests/test_aitestgen.py"
+      "code": "aitestgen/main.py",
+      "test": "tests/test_main.py"
+    },
+    {
+      "code": "aitestgen/ai_generator.py",
+      "test": "tests/test_ai_generator.py"
+    },
+    {
+      "code": "aitestgen/validators.py",
+      "test": "tests/test_validators.py"
     }
   ]
 }
