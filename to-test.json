@@ -2,9 +2,9 @@
   "language": "pyhton10",
   "framework": null,
   "model": "gpt-3.5-turbo",
-  "test-framework": null,
-  "package-file": null,
-  "additional-comments": [
+  "test_framework": null,
+  "package_file": null,
+  "additional_comments": [
     "Use functions for each testcase"
   ],
   "files": [
