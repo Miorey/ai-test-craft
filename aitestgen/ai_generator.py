@@ -1,6 +1,7 @@
 from openai import OpenAI
-from conf_representation import ProjectConfig
+from conf_representation import ProjectConfig, Overwrite
 from halo import Halo
+from pathlib import Path
 import os
 
 open_ai_client = OpenAI()
@@ -12,11 +13,20 @@ def setup_open_ai_client(open_ai_env_var: str | None):
 
 def execute_test_cover(gen_setup: ProjectConfig):
     language = gen_setup.language
-    conversation_history: list[dict[str, str]] = [{"role": "system", "content": f"You are a f{language} developer"}]
+    language_version = str(gen_setup.language_version or "")
+    conversation_history = [
+        {
+            "role": "system",
+            "content": f"You are a f{language} {language_version} developer"
+        }]
 
-    spinner = Halo(text="Yolo", spinner='dots')
+    spinner = Halo(text="Loading...", spinner='dots')
     for to_cover in gen_setup.files:
-        spinner.start(to_cover.code)
+        spinner.start(f"{to_cover.code} => {to_cover.test}")
+        if Path(to_cover.test).is_file() and gen_setup.overwrite == Overwrite.NEVER:
+            spinner.warn()
+            continue
+
         # AI-TEST: Mock the open usage to avoid FileNotFound exception
         with open(to_cover.code, 'r') as file:
             content = file.read()
@@ -39,6 +49,7 @@ def execute_test_cover(gen_setup: ProjectConfig):
                              - NO SYNTAX HIGHLIGHTING.
                              - no introduction or explanation.
                              - ALL the test should be in the same snippet.
+                             - Avoid to give in the answer the code given in the demand
                             ```
                                 {content}
                             ```
@@ -53,7 +64,8 @@ def execute_test_cover(gen_setup: ProjectConfig):
         )
         ai_answer = completion.choices[0].message.content
         conversation_history.append({'role': 'assistant', 'content': ai_answer})
-        only_code = ai_answer.replace("```", "")
+        only_code = ai_answer.replace(f"```{language}", "")
+        only_code = only_code.replace("```", "")
         with open(to_cover.test, 'w') as f:
             f.write(only_code)
         spinner.succeed()

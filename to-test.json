@@ -1,24 +1,26 @@
 {
-  "language": "pyhton10",
+  "language": "python",
+  "language_version": "3.11",
   "framework": null,
   "model": "gpt-3.5-turbo",
   "test_framework": null,
   "package_file": null,
+  "overwrite": "never",
   "additional_comments": [
-    "Use functions for each testcase"
+    "Use functions for each testcase and not unittest.TestCase"
   ],
   "files": [
     {
-      "code": "aitestgen/main.py",
-      "test": "tests/test_main.py"
-    },
-    {
-      "code": "aitestgen/ai_generator.py",
-      "test": "tests/test_ai_generator.py"
+      "code": "aitestgen/conf_representation.py",
+      "test": "tests/test_conf_representation.py"
     },
     {
       "code": "aitestgen/validators.py",
       "test": "tests/test_validators.py"
+    },
+    {
+      "code": "aitestgen/ai_generator.py",
+      "test": "tests/test_ai_generator.py"
     }
   ]
 }
