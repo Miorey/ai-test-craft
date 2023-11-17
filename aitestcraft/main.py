@@ -2,9 +2,9 @@ import os
 import click
 import json
 from pathlib import Path
-from validators import validate_inputs
-from ai_generator import execute_test_cover, setup_open_ai_client
-from conf_representation import project_config_factory
+from .validators import (validate_inputs)
+from .ai_generator import execute_test_cover, setup_open_ai_client
+from .conf_representation import project_config_factory
 
 
 @click.command()

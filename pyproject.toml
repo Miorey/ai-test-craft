@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-test-craft"
+version = "0.1.0"
+authors = [
+    { name = "Miorey", email = "clem.balea@gmail.com" },
+]
+dependencies = [
+    "openai~=1.1.0",
+    "click~=8.1.0",
+    "halo~=0.0.0",
+]
+
+[project.entry-points."console_scripts"]
+aitestcraft = "aitestcraft.main:generate_test"
+
+[tool.setuptools]
+packages = ["aitestcraft"]

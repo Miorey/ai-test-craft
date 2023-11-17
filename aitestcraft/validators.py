@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 import os
 
+
 def validate_inputs(filepath: str, open_ai_env_var: str | None) -> None:
     open_api_key = os.getenv(open_ai_env_var or "OPENAI_API_KEY")
     if not open_api_key:
