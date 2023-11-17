@@ -1,61 +1,119 @@
-# AI Test Generator
+# README.md for AITestCraft
 
-AI Test Generator is a command-line tool written in Python that utilizes OpenAI's models to automatically generate unit tests for your code.
+## AITestCraft - Automated Unit Test Generation for Python
 
-## Usage
+AITestCraft is a Python package that assists developers in generating unit tests for their code. It leverages OpenAI's GPT models to create test cases based on the structure and requirements of your codebase.
 
-To generate tests, provide the tool with a JSON configuration file as follows:
+### Features:
+
+- Automated generation of unit tests from JSON configuration.
+- Support for Python 3.11 and other versions.
+- Customizable to prevent overwriting existing test files.
+- Allows for additional comments to guide test case creation.
+- Sequential file processing for context-aware test generation.
+
+### Prerequisites:
+
+To use AITestCraft, you need an OpenAI API key. To obtain it, follow these steps:
+
+1. Sign up for an account at [OpenAI](https://openai.com).
+2. Navigate to the API section and follow the instructions to generate your API key.
+
+Before running AITestCraft, ensure that your `OPENAI_API_KEY` environment variable is set with your OpenAI API key. Alternatively, you can specify a custom environment variable name for your OpenAI API key using the command-line interface.
+
+### Installation:
+
+Install AITestCraft using pip:
 
 ```bash
-python aitestgen.py ./to-test.json
+pip install aitestcraft
 ```
 
-An OpenAI API key is required for authentication, which should be set as an environment variable named `OPENAI_API_KEY`. If you need to use a different environment variable name, pass it to the command with the `--open-ai-env-var` option:
+### Usage:
+
+First, set the `OPENAI_API_KEY` environment variable or a custom one:
+
+For Unix-based systems (Linux/Mac):
 
 ```bash
-python aitestgen.py --open-ai-env-var MY_ENV_VAR_NAME ./to-test.json
+export OPENAI_API_KEY='your_api_key_here'
 ```
 
-## Configuration File
+For Windows:
 
-The `to-test.json` file should be structured as shown below:
+```cmd
+set OPENAI_API_KEY=your_api_key_here
+```
+
+Alternatively, use a custom environment variable:
+
+```bash
+export MY_ENV_VAR_NAME='your_api_key_here'
+```
+
+To generate unit tests, create a JSON configuration file named `to-test.json`:
 
 ```json
 {
-  "language": "python10",
-  "framework": null,
+  "language": "python",
+  "language_version": "3.11",
   "model": "gpt-3.5-turbo",
-  "test-framework": null,
-  "package-file": null,
-  "additional-comments": [
-    "Use functions for each testcase"
+  "overwrite": "never",
+  "additional_comments": [
+    "Use functions for each testcase and not unittest.TestCase"
   ],
   "files": [
     {
-      "code": "aitestgen.py",
-      "test": "tests/test_aitestgen.py"
+      "code": "aitestcraft/conf_representation.py",
+      "test": "tests/test_conf_representation.py"
+    },
+    {
+      "code": "aitestcraft/validators.py",
+      "test": "tests/test_validators.py"
+    },
+    {
+      "code": "aitestcraft/ai_generator.py",
+      "test": "tests/test_ai_generator.py"
     }
   ]
 }
 ```
 
-Currently, only the `language`, `model`, `additional-comments`, and `files` keys are functional. The `files` array should contain objects with the paths of the code to test and the test file.
+Then run the package with:
 
-## Important Notes
-
-- **Iterative Generation**: The generation process might need to be run multiple times to achieve satisfactory results. In tests conducted, a maximum of 70% code coverage has been achieved.
-- **AI Guidance**: To direct the AI's attention to specific behaviors in your code, use the `AI-TEST` marker. For example, to mock an OpenAI call:
-
-```python
-# AI-TEST: mock the following openai call
+```bash
+aitestcraft to-test.json
 ```
 
-Include this comment directly above the code segment that requires special attention.
+Or if you're using a custom environment variable for the API key:
 
-## Limitations
+```bash
+python aitestgen.py --open-ai-env-var MY_ENV_VAR_NAME ./to-test.json
+```
 
-Please note that the current version of AI Test Generator may not achieve full code coverage and could require multiple iterations to generate effective tests. Adjustments and manual reviews might be necessary to tailor the tests to your codebase.
+### Configuration Fields:
 
-## Feedback
+- `language`: Programming language used.
+- `language_version`: Version of the programming language.
+- `model`: OpenAI model used for generating tests.
+- `overwrite`: If set to "never", existing test files will not be overwritten.
+- `additional_comments`: Optional, global comments for test generation.
+- `files`: A list of objects representing the source code and the test files.
 
-Your feedback is invaluable in improving AI Test Generator. Should you encounter any issues or have suggestions, please file them on the project's issue tracker.
+In the `files`, if a comment starts with `AI-TEST`, it indicates a message for the AI to include specific demands for the next line, like so:
+
+```python
+# AI-TEST: don't test this condition
+```
+
+### Note:
+
+The generated tests may require minor adjustments to fit the exact needs of your project.
+
+Order the files in `to-test.json` from the most standalone files to those with the most dependencies. This helps to provide context that can improve the quality of the generated tests.
+
+### Disclaimer:
+
+The test generation is not guaranteed to be perfect and might need adjustments to work seamlessly with your codebase.
+
+Happy Testing with AITestCraft!
