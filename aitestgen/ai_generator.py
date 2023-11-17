@@ -1,5 +1,5 @@
 from openai import OpenAI
-from conf_representation import ProjectConfig, Overwrite
+from aitestgen.conf_representation import ProjectConfig, Overwrite
 from halo import Halo
 from pathlib import Path
 import os
@@ -23,9 +23,6 @@ def execute_test_cover(gen_setup: ProjectConfig):
     spinner = Halo(text="Loading...", spinner='dots')
     for to_cover in gen_setup.files:
         spinner.start(f"{to_cover.code} => {to_cover.test}")
-        if Path(to_cover.test).is_file() and gen_setup.overwrite == Overwrite.NEVER:
-            spinner.warn()
-            continue
 
         # AI-TEST: Mock the open usage to avoid FileNotFound exception
         with open(to_cover.code, 'r') as file:
@@ -56,6 +53,13 @@ def execute_test_cover(gen_setup: ProjectConfig):
                             """
             }
         )
+
+        if Path(to_cover.test).is_file() and gen_setup.overwrite == Overwrite.NEVER:
+            spinner.warn()
+            with open(to_cover.test, 'r') as file:
+                content = file.read()
+                conversation_history.append({'role': 'assistant', 'content': content})
+            continue
 
         # AI-TEST: mock the following openai call
         completion = open_ai_client.chat.completions.create(
