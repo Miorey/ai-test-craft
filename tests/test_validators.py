@@ -7,7 +7,7 @@ import os
 from unittest.mock import mock_open, patch, MagicMock
 
 # Import the code to be tested
-from aitestgen.validators import validate_inputs
+from aitestcraft.validators import validate_inputs
 
 
 class TestValidators(unittest.TestCase):

@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 from typing import List, Dict
 
 # Import the code to be tested
-from aitestgen.conf_representation import File, ProjectConfig, Overwrite, project_config_factory
+from aitestcraft.conf_representation import File, ProjectConfig, Overwrite, project_config_factory
 
 
 class TestConfRepresentation(unittest.TestCase):

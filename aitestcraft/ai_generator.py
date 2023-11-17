@@ -1,5 +1,5 @@
 from openai import OpenAI
-from aitestgen.conf_representation import ProjectConfig, Overwrite
+from aitestcraft.conf_representation import ProjectConfig, Overwrite
 from halo import Halo
 from pathlib import Path
 import os
