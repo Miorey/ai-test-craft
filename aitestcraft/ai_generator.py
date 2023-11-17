@@ -2,16 +2,9 @@ from openai import OpenAI
 from aitestcraft.conf_representation import ProjectConfig, Overwrite
 from halo import Halo
 from pathlib import Path
-import os
-
-open_ai_client = OpenAI()
 
 
-def setup_open_ai_client(open_ai_env_var: str | None):
-    open_ai_client.api_key = os.getenv(open_ai_env_var or "OPENAI_API_KEY")
-
-
-def execute_test_cover(gen_setup: ProjectConfig):
+def execute_test_cover(gen_setup: ProjectConfig, open_ai_client: OpenAI):
     language = gen_setup.language
     language_version = str(gen_setup.language_version or "")
     conversation_history = [
@@ -66,7 +59,7 @@ def execute_test_cover(gen_setup: ProjectConfig):
             model=gen_setup.model,
             messages=conversation_history
         )
-        ai_answer = completion.choices[0].message.content
+        ai_answer: str = completion.choices[0].message.content
         conversation_history.append({'role': 'assistant', 'content': ai_answer})
         only_code = ai_answer.replace(f"```{language}", "")
         only_code = only_code.replace("```", "")
