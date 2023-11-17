@@ -1,4 +1,4 @@
-# AITestCraft
+# README.md for AITestCraft
 
 ## AITestCraft - Automated Unit Test Generation for Python
 
@@ -19,6 +19,8 @@ To use AITestCraft, you need an OpenAI API key. To obtain it, follow these steps
 1. Sign up for an account at [OpenAI](https://openai.com).
 2. Navigate to the API section and follow the instructions to generate your API key.
 
+Before running AITestCraft, ensure that your `OPENAI_API_KEY` environment variable is set with your OpenAI API key. Alternatively, you can specify a custom environment variable name for your OpenAI API key using the command-line interface.
+
 ### Installation:
 
 Install AITestCraft using pip:
@@ -28,6 +30,26 @@ pip install aitestcraft
 ```
 
 ### Usage:
+
+First, set the `OPENAI_API_KEY` environment variable or a custom one:
+
+For Unix-based systems (Linux/Mac):
+
+```bash
+export OPENAI_API_KEY='your_api_key_here'
+```
+
+For Windows:
+
+```cmd
+set OPENAI_API_KEY=your_api_key_here
+```
+
+Alternatively, use a custom environment variable:
+
+```bash
+export MY_ENV_VAR_NAME='your_api_key_here'
+```
 
 To generate unit tests, create a JSON configuration file named `to-test.json`:
 
@@ -61,6 +83,12 @@ Then run the package with:
 
 ```bash
 aitestcraft to-test.json
+```
+
+Or if you're using a custom environment variable for the API key:
+
+```bash
+python aitestgen.py --open-ai-env-var MY_ENV_VAR_NAME ./to-test.json
 ```
 
 ### Configuration Fields:
