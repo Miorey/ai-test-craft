@@ -66,7 +66,7 @@ def execute_test_cover(gen_setup: ProjectConfig):
             model=gen_setup.model,
             messages=conversation_history
         )
-        ai_answer = completion.choices[0].message.content
+        ai_answer: str = completion.choices[0].message.content
         conversation_history.append({'role': 'assistant', 'content': ai_answer})
         only_code = ai_answer.replace(f"```{language}", "")
         only_code = only_code.replace("```", "")
