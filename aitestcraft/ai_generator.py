@@ -27,7 +27,7 @@ def execute_test_cover(gen_setup: ProjectConfig):
         # AI-TEST: Mock the open usage to avoid FileNotFound exception
         with open(to_cover.code, 'r') as file:
             content = file.read()
-        additional_comments: list[str] = gen_setup.additional_comments
+        additional_comments = gen_setup.additional_comments if gen_setup.additional_comments else []
 
         conversation_history.append(
             {

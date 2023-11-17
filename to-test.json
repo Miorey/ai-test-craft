@@ -11,15 +11,15 @@
   ],
   "files": [
     {
-      "code": "aitestgen/conf_representation.py",
+      "code": "aitestcraft/conf_representation.py",
       "test": "tests/test_conf_representation.py"
     },
     {
-      "code": "aitestgen/validators.py",
+      "code": "aitestcraft/validators.py",
       "test": "tests/test_validators.py"
     },
     {
-      "code": "aitestgen/ai_generator.py",
+      "code": "aitestcraft/ai_generator.py",
       "test": "tests/test_ai_generator.py"
     }
   ]
