@@ -13,6 +13,7 @@ dependencies = [
     "click~=8.1.0",
     "halo~=0.0.0",
 ]
+readme = "README.md"
 
 [project.entry-points."console_scripts"]
 aitestcraft = "aitestcraft.main:generate_test"
