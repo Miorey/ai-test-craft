@@ -17,6 +17,10 @@ dependencies = [
 [project.entry-points."console_scripts"]
 aitestcraft = "aitestcraft.main:generate_test"
 
+[project.urls]
+Homepage = "https://github.com/Miorey/ai-test-craft"
+Issues = "https://github.com/Miorey/ai-test-craft/issues"
+
 [tool.setuptools]
 packages = ["aitestcraft"]
 

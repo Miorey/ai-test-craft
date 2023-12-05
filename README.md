@@ -95,8 +95,8 @@ python aitestgen.py --open-ai-env-var MY_ENV_VAR_NAME ./to-test.json
 
 - `language`: Programming language used.
 - `language_version`: Version of the programming language.
-- `model`: OpenAI model used for generating tests.
-- `overwrite`: If set to "never", existing test files will not be overwritten.
+- `model`: OpenAI [model](https://platform.openai.com/docs/models/continuous-model-upgrades) used for generating tests.
+- `overwrite`: [`"neve"` / `"always"`] If set to "never", existing test files will not be overwritten.
 - `additional_comments`: Optional, global comments for test generation.
 - `files`: A list of objects representing the source code and the test files.
 
@@ -115,5 +115,3 @@ Order the files in `to-test.json` from the most standalone files to those with t
 ### Disclaimer:
 
 The test generation is not guaranteed to be perfect and might need adjustments to work seamlessly with your codebase.
-
-Happy Testing with AITestCraft!
