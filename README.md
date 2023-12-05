@@ -7,7 +7,7 @@ AITestCraft is a Python package that assists developers in generating unit tests
 ### Features:
 
 - Automated generation of unit tests from JSON configuration.
-- Support for Python 3.11 and other versions.
+- Support for Python 3.10 and other versions.
 - Allows for additional comments to guide test case creation.
 - Sequential file processing for context-aware test generation.
 

@@ -26,7 +26,7 @@ Issues = "https://github.com/Miorey/ai-test-craft/issues"
 packages = ["aitestcraft"]
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.10"
 ignore_missing_imports = true
 check_untyped_defs = true
 strict_optional = true
