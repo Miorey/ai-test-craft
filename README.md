@@ -25,7 +25,7 @@ Before running AITestCraft, ensure that your `OPENAI_API_KEY` environment variab
 Install AITestCraft using pip:
 
 ```bash
-pip install aitestcraft
+pip install ai-test-craft
 ```
 
 ### Usage:
@@ -95,7 +95,7 @@ python aitestgen.py --open-ai-env-var MY_ENV_VAR_NAME ./to-test.json
 - `language`: Programming language used.
 - `language_version`: Version of the programming language.
 - `model`: OpenAI [model](https://platform.openai.com/docs/models/continuous-model-upgrades) used for generating tests.
-- `overwrite`: [`"neve"` / `"always"`] If set to "never", existing test files will not be overwritten.
+- `overwrite`: [`"never"` / `"always"`] If set to "never", existing test files will not be overwritten.
 - `additional_comments`: Optional, global comments for test generation.
 - `files`: A list of objects representing the source code and the test files.
 

@@ -2,7 +2,7 @@ import os
 import click
 import json
 from pathlib import Path
-from .validators import (validate_inputs)
+from .validators import validate_inputs
 from .ai_generator import execute_test_cover
 from .conf_representation import project_config_factory
 from openai import OpenAI
